@@ -4,10 +4,13 @@ using namespace std;
 // function prototypes
 int displayBoard();
 int resetBoard();
-int insertToken(int column);
+int insertToken(int column, int turn);
+int removeToken(int column);
+int changeTurn();
 int checkWin();
 int index(int row, int col);
 int scoreBoard();
+int insertTokenCPU();
 
 // initializing global variables
 int BOARD[42] = {0};
@@ -15,15 +18,42 @@ int TURN = 1;
 
 
 int main() {
-    while (true)
-    {
-        int input = 0;
-        displayBoard();
-        cout << "Player " << TURN << " choose a column ";
-        cin >> input;
-        insertToken(input);
-        checkWin();
+    int input = 0;
+    int mode = 0;
+    cout << "1 - Single Player" << endl;
+    cout << "2 - Two Player" << endl;
+    cout << "Select Mode: ";
+    cin >> mode;
+
+    if (mode == 1) {
+        while (true)
+        {
+            displayBoard();
+            checkWin();
+            if (TURN == 1) {
+                cout << "Player " << TURN << " choose a column ";
+                cin >> input;
+                insertToken(input, TURN);
+            }
+            else if (TURN == 2) {
+                insertTokenCPU();
+            }
+            changeTurn();
+        }
     }
+
+    if (mode == 2) {
+        while (true)
+        {
+            displayBoard();
+            checkWin();
+            cout << "Player " << TURN << " choose a column ";
+            cin >> input;
+            insertToken(input, TURN);
+            changeTurn();
+        }
+    }
+
     return 0;
 }
 
@@ -57,7 +87,7 @@ int resetBoard() {
     return 0;
 }
 
-int insertToken(int column) {
+int insertToken(int column, int turn = TURN) {
     if (column < 0 || column > 6) {
         cout << "Please insert a valid column." << endl;
         return 1;
@@ -65,15 +95,40 @@ int insertToken(int column) {
     
     for (int i = 5; i >= 0; i--) {
         if (BOARD[index(i, column)] == 0) {
-            BOARD[index(i, column)] = TURN;
-            if (TURN == 1) {TURN = 2;}
-            else {TURN = 1;}
+            BOARD[index(i, column)] = turn;
             return 0;
         }
     }
 
     cout << "Cannot insert a token in this column." << endl;
     return 1;
+}
+
+int removeToken(int column) {
+    if (column < 0 || column > 6) {
+        cout << "Please insert a valid column." << endl;
+        return 1;
+    }
+
+    for (int i = 0; i < 6; i++) {
+        if (BOARD[index(i, column)] != 0) {
+            BOARD[index(i, column)] = 0;
+            return 0;
+        }
+    }
+    
+    cout << "Cannot remove a token in this column." << endl;
+    return 1;
+}
+
+int changeTurn() {
+    if (TURN == 1) {
+        TURN = 2;
+    }
+    else if (TURN == 2) {
+        TURN = 1;
+    }
+    return 0;
 }
 
 int checkWin() {
@@ -187,4 +242,11 @@ int scoreBoard() {
             totalScore += scores[count1] - scores[count2];
         }
     }
+
+    return totalScore;
+}
+
+int insertTokenCPU() {
+    insertToken(0, TURN);
+    return 0;
 }
