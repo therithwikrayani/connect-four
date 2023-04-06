@@ -170,7 +170,7 @@ int checkWin() {
             if (row - 3 >= 0 && col + 3 < 7 &&
                 current == BOARD[index(row - 1, col + 1)] &&
                 current == BOARD[index(row - 2, col + 2)] &&
-                current == BOARD[index(row - 3, col - 3)]) {
+                current == BOARD[index(row - 3, col + 3)]) {
                 cout << "Player " << current << " wins!" << endl;
                 exit(0);
             }
