@@ -247,6 +247,30 @@ int scoreBoard() {
 }
 
 int insertTokenCPU() {
-    insertToken(0, TURN);
+    int playerMaxScore[7];
+    for (int i = 0; i < 7; i++) {
+        insertToken(i, 2);
+        int max = -10000000;
+        for (int j = 0; j < 7; j++) {
+            insertToken(j, 1);
+            int score = scoreBoard();
+            if(score > max) {
+                max = score;
+            }
+            removeToken(j);
+        }
+        playerMaxScore[i] = max;
+        removeToken(i);
+    }
+
+    int minIndex = 0;
+    for (int i = 1; i < 7; i++) {
+        if (playerMaxScore[i] < playerMaxScore[minIndex]) {
+            minIndex = i;
+        }
+    }
+
+    insertToken(minIndex);
+
     return 0;
 }
