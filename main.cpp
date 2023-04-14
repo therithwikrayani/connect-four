@@ -31,12 +31,13 @@ int main() {
             displayBoard();
             checkWin();
             if (TURN == 1) {
-                cout << "Player " << TURN << " choose a column ";
+                cout << "Choose a column ";
                 cin >> input;
                 insertToken(input, TURN);
             }
             else if (TURN == 2) {
-                insertTokenCPU();
+                int minIndex = insertTokenCPU();
+                cout << "CPU plays column " << minIndex;
             }
             changeTurn();
         }
@@ -272,5 +273,5 @@ int insertTokenCPU() {
 
     insertToken(minIndex);
 
-    return 0;
+    return minIndex;
 }
